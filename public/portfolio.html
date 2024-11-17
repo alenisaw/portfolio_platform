@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    /* Простые стили для карусели */
+    .carousel {
+      display: flex;
+      overflow: hidden;
+      width: 100%;
+      max-width: 600px; /* Можно изменить в зависимости от потребностей */
+      margin: 0 auto;
+    }
+
+    .carousel-images {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+
+    .carousel-images img {
+      width: 100%;
+      height: auto;
+      max-width: 600px;
+    }
+
+    .carousel-button {
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+    }
+
+    .carousel-button.prev {
+      left: 10px;
+    }
+
+    .carousel-button.next {
+      right: 10px;
+    }
+
+    .project {
+      margin: 20px;
+      border: 1px solid #ccc;
+      padding: 15px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Your Portfolio</h1>
+  </header>
+
+  <main>
+    <div id="portfolio" class="portfolio-section">
+      <!-- Здесь будут отображаться проекты -->
+    </div>
+
+    <!-- Форма для добавления нового проекта -->
+    <div class="form-container">
+      <h3>Add New Project</h3>
+      <form id="addProjectForm">
+        <label for="title">Project Title:</label>
+        <input type="text" id="title" name="title" required>
+        <br><br>
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required></textarea>
+        <br><br>
+        <label for="skills">Skills:</label>
+        <input type="text" id="skills" name="skills" required>
+        <br><br>
+        <label for="images">Images:</label>
+        <input type="file" id="images" name="images" accept="image/*" multiple>
+        <br><br>
+        <button type="submit">Add Project</button>
+      </form>
+    </div>
+
+    <!-- Форма для редактирования проекта -->
+    <div class="form-container" id="editFormContainer" style="display: none;">
+      <h3>Edit Project</h3>
+      <form id="editProjectForm">
+        <input type="hidden" id="editProjectId">
+        <label for="editTitle">Project Title:</label>
+        <input type="text" id="editTitle" name="title" required>
+        <br><br>
+        <label for="editDescription">Description:</label>
+        <textarea id="editDescription" name="description" required></textarea>
+        <br><br>
+        <label for="editSkills">Skills:</label>
+        <input type="text" id="editSkills" name="skills" required>
+        <br><br>
+        <button type="submit">Save Changes</button>
+        <button type="button" onclick="cancelEdit()">Cancel</button>
+      </form>
+    </div>
+
+    <a href="/" class="home-link">Logout</a>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 JJ.kz | Created by Alen Issayev BDA-2302</p>
+  </footer>
+
+  <script>
+    // Добавление нового проекта
+    document.getElementById('addProjectForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const title = document.getElementById('title').value;
+      const description = document.getElementById('description').value;
+      const skills = document.getElementById('skills').value.split(',');
+      const images = document.getElementById('images').files;
+
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('description', description);
+      formData.append('skills', skills);
+      Array.from(images).forEach(image => {
+        formData.append('images', image);
+      });
+
+      try {
+        const response = await fetch('/portfolio', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (response.ok) {
+          alert('Project added successfully!');
+          window.location.reload(); // Перезагружаем страницу, чтобы увидеть изменения
+        } else {
+          alert('Error adding project');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred');
+      }
+    });
+
+    // Получение списка проектов
+    async function fetchPortfolio() {
+      try {
+        const response = await fetch('/portfolio');
+        if (!response.ok) {
+          const errorMessage = await response.text(); // Прочитаем тело ответа
+          throw new Error(`Error fetching portfolio: ${errorMessage}`);
+        }
+        const portfolio = await response.json();
+        console.log('Fetched portfolio:', portfolio);
+        
+        const portfolioContainer = document.getElementById('portfolio');
+        portfolioContainer.innerHTML = '';
+        portfolio.forEach(project => {
+          const projectElement = document.createElement('div');
+          projectElement.classList.add('project');
+          
+          // Карусель изображений
+          let carouselHtml = '';
+          if (project.images && project.images.length > 0) {
+            carouselHtml = `
+              <div class="carousel">
+                <button class="carousel-button prev" onclick="moveCarousel('${project._id}', -1)">&#10094;</button>
+                <div class="carousel-images" id="carousel-${project._id}">
+                  ${project.images.map(img => `<img src="/uploads/${img}" alt="Project Image" style="display: none;">`).join('')}
+                </div>
+                <button class="carousel-button next" onclick="moveCarousel('${project._id}', 1)">&#10095;</button>
+              </div>
+            `;
+          }
+
+          projectElement.innerHTML = `
+            <h3>${project.title}</h3>
+            <p>${project.description}</p>
+            <p><strong>Skills:</strong> ${project.skills ? project.skills.join(', ') : 'No skills listed'}</p>
+            <p><strong>Last Updated:</strong> ${new Date(project.updatedAt).toLocaleString()}</p>
+            ${carouselHtml}
+            <button onclick="deleteProject('${project._id}')">Delete</button>
+            <button onclick="editProject('${project._id}')">Edit</button>
+          `;
+          portfolioContainer.appendChild(projectElement);
+        });
+      } catch (error) {
+        console.error('Error:', error);
+        alert(error.message);
+      }
+    }
+
+    // Перемещение карусели
+    function moveCarousel(projectId, direction) {
+      const carousel = document.getElementById(`carousel-${projectId}`);
+      const images = carousel.querySelectorAll('img');
+      const totalImages = images.length;
+
+      let currentIndex = Array.from(images).findIndex(img => img.style.display === 'block');
+      if (currentIndex === -1) currentIndex = 0; // Начинаем с первого изображения
+
+      const nextIndex = (currentIndex + direction + totalImages) % totalImages;
+
+      // Прячем все изображения и показываем следующее
+      images.forEach(img => img.style.display = 'none');
+      images[nextIndex].style.display = 'block'; // Показываем следующее изображение
+    }
+
+    // Удаление проекта
+    async function deleteProject(projectId) {
+      try {
+        const response = await fetch(`/portfolio/remove/${projectId}`, {
+          method: 'DELETE',
+        });
+        if (response.ok) {
+          alert('Project deleted');
+          fetchPortfolio();
+        } else {
+          alert('Error deleting project');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred');
+      }
+    }
+
+    // Редактирование проекта
+    async function editProject(projectId) {
+      try {
+        const response = await fetch(`/portfolio/${projectId}`);
+        if (!response.ok) {
+          throw new Error('Error fetching project');
+        }
+        const project = await response.json();
+
+        // Заполняем форму редактирования данными проекта
+        document.getElementById('editProjectId').value = project._id;
+        document.getElementById('editTitle').value = project.title;
+        document.getElementById('editDescription').value = project.description;
+        document.getElementById('editSkills').value = project.skills.join(', ');
+
+        // Показываем форму редактирования и скрываем форму добавления
+        document.getElementById('addProjectForm').style.display = 'none';
+        document.getElementById('editFormContainer').style.display = 'block';
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred');
+      }
+    }
+
+    // Отмена редактирования
+    async function cancelEdit() {
+      // Скрываем форму редактирования и показываем форму добавления
+      document.getElementById('editFormContainer').style.display = 'none';
+      document.getElementById('addProjectForm').style.display = 'block';
+    }
+
+    // Сохранение изменений проекта
+    document.getElementById('editProjectForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const projectId = document.getElementById('editProjectId').value;
+      const title = document.getElementById('editTitle').value;
+      const description = document.getElementById('editDescription').value;
+      const skills = document.getElementById('editSkills').value.split(',');
+
+      try {
+        const response = await fetch(`/portfolio/${projectId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ title, description, skills }),
+        });
+
+        if (response.ok) {
+          alert('Project updated successfully!');
+          fetchPortfolio();
+          cancelEdit();
+        } else {
+          alert('Error updating project');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert(error.message || 'An error occurred');
+      }
+    });
+
+    // Загрузка портфолио при запуске страницы
+    fetchPortfolio();
+  </script>
+</body>
+</html>

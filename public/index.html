@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to JJ.kz</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Welcome to JJ.kz - Your Personal Portfolio Platform</h1>
+    <nav>
+      <ul>
+        <li><a href="/portfolio.html">Portfolio</a></li>
+        <li><a href="/login.html">Login</a></li>
+        <li><a href="/register.html">Register</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="news">
+      <h2>Latest News</h2>
+      <div id="news-articles">
+        <!-- Новости будут загружаться сюда через API -->
+      </div>
+    </section>
+
+    <section id="gallery">
+      <h2>Image Gallery</h2>
+      <div id="gallery-images">
+        <!-- Изображения будут загружаться сюда через API -->
+      </div>
+    </section>
+
+    <section id="about">
+      <h2>About JJ.kz</h2>
+      <p>JJ.kz is your personal space for showcasing your projects, portfolio, and skills. Sign up today to get started!</p>
+    </section>
+
+    <a href="/" class="home-link">Back to Home</a>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 JJ.kz | Created by Alen Issayev BDA-2302</p>
+  </footer>
+
+  <script>
+    // Интеграция NewsAPI для отображения новостей
+    axios.get('https://newsapi.org/v2/top-headlines?country=us&apiKey=f37cb40005714b129087222bca6f8bab')
+      .then(response => {
+        const articles = response.data.articles.slice(0, 2);  // Ограничиваем до 5 новостей
+        const newsContainer = document.getElementById('news-articles');
+        articles.forEach(article => {
+          const articleElement = document.createElement('div');
+          articleElement.classList.add('article');
+          articleElement.innerHTML = `
+            <a href="${article.url}" target="_blank">
+              <img src="${article.urlToImage}" alt="${article.title}">
+            </a>
+            <h3>${article.title}</h3>
+            <p>${article.description}</p>
+          `;
+          newsContainer.appendChild(articleElement);
+        });
+      })
+      .catch(error => console.error('Error fetching news:', error));
+
+    // Интеграция Unsplash API для отображения изображений
+    axios.get('https://api.unsplash.com/photos?client_id=w1Cqf6qSPjJm5_8sHSHAZd91x0HmANKjezaelMs43f0')
+      .then(response => {
+        const images = response.data;
+        const galleryContainer = document.getElementById('gallery-images');
+        images.forEach(image => {
+          const imageElement = document.createElement('div');
+          imageElement.classList.add('image-item');
+          imageElement.innerHTML = `
+            <a href="${image.links.html}" target="_blank">
+              <img src="${image.urls.small}" alt="${image.alt_description}">
+            </a>
+          `;
+          galleryContainer.appendChild(imageElement);
+        });
+      })
+      .catch(error => console.error('Error fetching images:', error));
+  </script>
+</body>
+</html>

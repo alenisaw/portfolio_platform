@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2FA Authentication</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <h1>2FA Authentication</h1>
+  </header>
+
+  <main>
+    <div class="form-container">
+      <h3>Enter Your 2FA Code</h3>
+      <form action="/verify-2fa" method="POST">
+        <input type="text" name="token" placeholder="Enter 2FA code" required>
+        <button type="submit">Verify</button>
+      </form>
+      <br>
+      <a href="/login" class="home-link">Back to Login</a> <!-- Кнопка возврата на страницу входа -->
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 JJ.kz | Created by Alen Issayev</p>
+  </footer>
+
+</body>
+</html>

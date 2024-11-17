@@ -1,0 +1,327 @@
+/* Общие стили для всей страницы */
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #6a1b9a, #1e88e5); /* Изменение на фиолетово-синий градиент */
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Минимальная высота страницы 100% */
+}
+
+h1, h2 {
+  text-align: center;
+  color: #fff;
+  margin: 20px 0;
+}
+
+/* Общие стили для контейнеров */
+main {
+  flex: 1; /* Заполняет оставшееся пространство, вытягивает контейнеры */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+section {
+  margin-bottom: 30px;
+}
+
+header {
+  background-color: #333;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+header h1 {
+  color: #fff;
+  font-size: 2.5rem;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+nav ul li {
+  margin: 0 15px;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.2rem;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+nav ul li a:hover {
+  background-color: #ffeb3b; /* Изменен цвет на желтый при наведении */
+}
+
+/* Стиль для карточек новостей */
+.article {
+  background-color: #263238;
+  border: 1px solid #37474F;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 20px;
+  width: 100%; 
+  display: inline-block;
+  margin-right: 15px;
+  margin-left: 15px;
+  text-align: center;
+}
+
+.article:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.article img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.article .text-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: -20px;
+}
+
+#news-articles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
+}
+
+#news-articles .article {
+  width: calc(33% - 20px); 
+  max-width: 350px;
+}
+
+@media (max-width: 900px) {
+  #news-articles .article {
+    width: calc(50% - 20px); 
+  }
+}
+
+@media (max-width: 600px) {
+  #news-articles .article {
+    width: 100%; 
+  }
+}
+
+/* Стили для галереи изображений */
+#gallery-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  justify-items: center;
+  margin-top: 20px;
+}
+
+.image-item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.image-item img:hover {
+  transform: scale(1.05);
+}
+
+.image-item .text-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 5px;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  color: #fff;
+}
+
+/* Стили для кнопок */
+button, .cta-button {
+  background-color: #ffeb3b; /* Изменено на желтый */
+  color: #333;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover, .cta-button:hover {
+  background-color: #fbc02d; /* Потемнение желтого */
+  transform: translateY(-5px);
+}
+
+/* Центрирование всех элементов */
+#news, #gallery, #about {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#news-articles, #gallery-images {
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
+}
+
+footer {
+  background-color: #222;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+}
+
+/* Стили для About секции */
+#about {
+  text-align: center;
+  padding: 40px;
+  background-color: #37474f;
+  border-radius: 8px;
+}
+
+#about p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+/* Оформление заголовков и ссылок */
+h1, h2 {
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: #ffeb3b; /* Желтые ссылки */
+  font-weight: bold;
+}
+
+a:hover {
+  color: #fbc02d;
+}
+
+/* Добавление ссылки на главную */
+a.home-link {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  text-align: center;
+  background-color: #ffeb3b;
+  color: #333;
+  border-radius: 5px;
+  width: 150px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+a.home-link:hover {
+  background-color: #fbc02d;
+  transform: translateY(-5px);
+}
+
+/* Стили для форм */
+input[type="text"], input[type="email"], input[type="password"], input[type="submit"], input[type="number"], select {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box; /* Обеспечивает правильное масштабирование */
+}
+
+/* Стиль для фокуса на полях ввода */
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, input[type="number"]:focus, select:focus {
+  border: 1px solid #ffeb3b;
+  box-shadow: 0 0 8px rgba(255, 235, 59, 0.6);
+  outline: none;
+}
+
+/* Стиль для кнопки отправки формы */
+input[type="submit"], .cta-button {
+  background-color: #ffeb3b;
+  color: #333;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+input[type="submit"]:hover, .cta-button:hover {
+  background-color: #fbc02d; /* Потемнение желтого */
+  transform: translateY(-5px);
+}
+
+form {
+  background-color: #263238;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+form label {
+  color: #fff;
+  margin-bottom: 5px;
+  font-size: 1.1rem;
+}
+
+form .form-group {
+  margin-bottom: 20px;
+}
+
+form h2 {
+  color: #fff;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Стили для поля description (textarea) */
+textarea {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  resize: vertical; /* Пользователь может изменять размер по вертикали */
+  box-sizing: border-box; /* Обеспечивает правильное масштабирование */
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+textarea:focus {
+  border: 1px solid #ffeb3b;
+  box-shadow: 0 0 8px rgba(255, 235, 59, 0.6);
+  outline: none;
+}
