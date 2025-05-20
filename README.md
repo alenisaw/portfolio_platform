@@ -1,21 +1,37 @@
-#This project were created by Alen Issayev from BDA-2302
-#If you found some bugs or issues, contact me by e-mail: alenkz20001@gmail.com
-#This project was written under tears and screams
 
-Documentation for "Portfolio Platform" Project
-Project Description
-Portfolio Platform is a web application that allows users to create, update, and view their portfolios online. The app includes a user registration and authentication system with two-factor authentication (2FA), the ability to upload images for projects, and an admin panel for managing users and content.
+# Documentation for "Portfolio Platform" Project
 
-Key Features:
-User registration and login system.
-Two-factor authentication (2FA).
-Ability to create, edit, and delete portfolio projects.
-Image uploads for projects.
-Admin panel for managing users.
-Integration with email for sending welcome messages and 2FA setup instructions.
+> _This project was created by **Alen Issayev** from **BDA-2302**_  
+> _If you found some bugs or issues, contact me by e-mail: **alenkz20001@gmail.com**_  
+> _#This project was written under tears and screams_
 
+---
 
-Project Structure:
+## 📌 Project Description
+
+**Portfolio Platform** is a web application that allows users to create, update, and view their portfolios online.  
+The app includes:
+
+- User registration and authentication system with **two-factor authentication (2FA)**
+- Ability to **upload images** for projects
+- An **admin panel** for managing users and content
+
+---
+
+## ✨ Key Features
+
+- ✅ User registration and login system  
+- 🔐 Two-factor authentication (2FA)  
+- ✏️ Ability to create, edit, and delete portfolio projects  
+- 🖼️ Image uploads for projects  
+- 🛠️ Admin panel for managing users  
+- 📧 Email integration for welcome messages and 2FA setup
+
+---
+
+## 📁 Project Structure
+
+```
 portfolio_platform/
 ├── app.js                  # Main application file
 ├── models/                 # MongoDB models (User, Portfolio)
@@ -31,94 +47,141 @@ portfolio_platform/
 │   └── 2fa.html            # Two-factor authentication page
 ├── .env                    # Environment configuration (variables)
 └── package.json            # Project dependencies and configuration
+```
 
-Installation and Setup:
+---
 
-1. Clone the Repository
-Start by cloning the project repository:
+## ⚙️ Installation and Setup
+
+### 1. Clone the Repository
+
+```bash
 git clone <repository-url>
 cd portfolio_platform
+```
 
-2. Install Dependencies
-Install the required dependencies using npm:
+### 2. Install Dependencies
+
+```bash
 npm install
+```
 
-3. Set Up Environment Variables
-Create a .env file in the root directory of the project and add the following variables:
+### 3. Set Up Environment Variables
 
-env
-Copy code
+Create a `.env` file in the root directory and add the following:
+
+```env
 MONGODB_URI=mongodb://localhost:27017/portfolio_platform
 EMAIL_USER=your-email@example.com
 EMAIL_PASS=your-email-password
-MONGODB_URI — MongoDB connection string (use the default if running MongoDB locally).
-EMAIL_USER and EMAIL_PASS — Your email account credentials for sending emails.
-Note: If using Gmail with two-factor authentication, create an "App Password" and use it instead of your regular password.
+```
 
-4. Run MongoDB
-If MongoDB is not installed, download and install it from the official MongoDB website and start the local server:
+> 🔒 If using Gmail with 2FA, use an **App Password** instead of your regular password.
+
+### 4. Run MongoDB
+
+Ensure MongoDB is installed and running:
+
+```bash
 mongod
+```
 
-5. Start the Application
-Now, you can start the server:
+### 5. Start the Application
+
+```bash
 npm start
+```
 
-By default, the server will be available at http://localhost:3000.
+The app will be available at: [http://localhost:3000](http://localhost:3000)
 
-6. Database Structure
-User Model
-The user model stores information about the user, including:
+---
 
-email — required, unique email address for each user.
-username — user's username.
-password — hashed password.
-firstName, lastName — first and last name of the user.
-age — user's age.
-gender — user's gender.
-role — user role (default is "user", "admin" for administrators).
-Portfolio Model
-The portfolio model contains projects for each user. Each project includes:
+## 🧱 Database Structure
 
-title — project title.
-description — project description.
-images — array of image paths.
-user — reference to the user who owns the project.
+### 🔹 User Model
 
+Stores information about users:
 
-API Endpoints
+- `email` — required, unique
+- `username`
+- `password` — hashed
+- `firstName`, `lastName`
+- `age`, `gender`
+- `role` — `"user"` or `"admin"`
 
-Registration and Authentication
-POST /register — User registration.
-Required fields: email, username, password, firstName, lastName, age, gender.
-POST /login — User login.
-Required fields: username, password.
-POST /verify-2fa — Verify 2FA token.
-Required field: token (generated by a 2FA app, e.g., Google Authenticator).
+### 🔹 Portfolio Model
 
-Portfolio
-GET /portfolio — Get the current user's projects.
-POST /portfolio — Add a new portfolio project (with image uploads).
-Required fields: title, description, images (max 3).
-PUT /portfolio/:projectId — Update an existing project.
-Required fields: title, description, new images.
-DELETE /portfolio/:projectId — Delete a project from the portfolio.
+Each user's portfolio project includes:
 
-Admin Panel
-GET /admin-dashboard — Accessible only to admins. Allows viewing and managing users' information.
+- `title`
+- `description`
+- `images` — array of image paths
+- `user` — reference to the owning user
 
-Technologies Used
-Node.js — Server-side JavaScript runtime.
-Express.js — Framework for building server applications.
-MongoDB — Database for storing user and portfolio data.
-Mongoose — ODM library for MongoDB.
-Nodemailer — Library for sending emails.
-Speakeasy — Library for implementing two-factor authentication (2FA).
-Multer — Middleware for handling file uploads (images).
-bcryptjs — Library for hashing passwords.
+---
 
-Notes
-For two-factor authentication, use a mobile app that supports TOTP (e.g., Google Authenticator).
-If using Gmail for sending emails, ensure you have set up "App Passwords" if using two-factor authentication.
+## 🔗 API Endpoints
 
-Conclusion
-This project provides full functionality for creating and managing user portfolios, with registration, login, and two-factor authentication. It also includes an admin panel for managing users and their content.
+### 🔐 Registration and Authentication
+
+- `POST /register` — Register a new user  
+  **Fields:** `email`, `username`, `password`, `firstName`, `lastName`, `age`, `gender`
+
+- `POST /login` — Login with username and password  
+  **Fields:** `username`, `password`
+
+- `POST /verify-2fa` — Verify TOTP token  
+  **Field:** `token` (from Google Authenticator or similar app)
+
+---
+
+### 🧳 Portfolio Management
+
+- `GET /portfolio` — Get current user's portfolio projects
+
+- `POST /portfolio` — Create a new project  
+  **Fields:** `title`, `description`, `images (max 3)`
+
+- `PUT /portfolio/:projectId` — Update a project  
+  **Fields:** `title`, `description`, `images`
+
+- `DELETE /portfolio/:projectId` — Delete a project
+
+---
+
+### 👨‍💼 Admin Panel
+
+- `GET /admin-dashboard` — View and manage all users (admin only)
+
+---
+
+## 🧰 Technologies Used
+
+- **Node.js** — Runtime environment  
+- **Express.js** — Web framework  
+- **MongoDB** — NoSQL database  
+- **Mongoose** — MongoDB ODM  
+- **Nodemailer** — Sending emails  
+- **Speakeasy** — 2FA implementation  
+- **Multer** — File/image uploads  
+- **bcryptjs** — Password hashing
+
+---
+
+## 📎 Notes
+
+- Use a TOTP app (like **Google Authenticator**) for 2FA
+- For Gmail, enable **App Passwords** if 2FA is on
+
+---
+
+## ✅ Conclusion
+
+This project provides full functionality for creating and managing user portfolios:
+
+- Secure registration and login  
+- Two-factor authentication  
+- Image uploads for project visualization  
+- Admin panel for management tasks
+
+Feel free to contribute, fork, or customize it for your needs!
